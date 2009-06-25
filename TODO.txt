@@ -1,6 +1,7 @@
 TODO
 
-- Error - Space Not Empty (does not appear)
+- Add text for error message
+- Add position class, with position.x and position.y
 - Add "new game" button
 - Check for win - 3 in a row
 - Game over? if no spaces left, its a scratch game

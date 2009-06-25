@@ -4,13 +4,15 @@ GAME = TicTacToe::Game.new
 BOARD = GAME.board
 TILE_SIZE = 60
 Shoes.app do
-  def display
+  def display error = nil
     clear do
       stack do
         display_board
         para "Turn: #{GAME.whose_turn.to_s.upcase}"
-        @move = para "Move: "
-        @error = para
+        if @last_move
+          @move = para "Move: #{@last_move[0]}, #{@last_move[1]}"
+        end
+        @error = para error
       end
     end
   end
@@ -31,13 +33,14 @@ Shoes.app do
       render_o if BOARD[x, y] == :o
       render_x if BOARD[x, y] == :x
       click do 
-        @move.text = "Move: #{x},#{y}"
+        @last_move = [x, y]
+        error_message = nil
         begin 
           GAME.play GAME.whose_turn, x, y
-        rescue => e
-          @error.replace e.message
+        rescue TicTacToe::SpaceNotEmpty => e
+          error_message = e.message
         end
-        display
+        display error_message
       end
     end
   end
