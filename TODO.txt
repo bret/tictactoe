@@ -1,0 +1,6 @@
+TODO
+
+- Error - Space Not Empty (does not appear)
+- Add "new game" button
+- Check for win - 3 in a row
+- Game over? if no spaces left, its a scratch game
