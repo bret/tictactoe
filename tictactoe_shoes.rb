@@ -16,9 +16,11 @@ Shoes.app do
         display_board
         para "Turn: #{@game.whose_turn.to_s.upcase}"
         if @last_move
-          @move = para "Move: #{@last_move[0]}, #{@last_move[1]}"
+          para "Move: #{@last_move.x}, #{@last_move.y}"
         end
-        @error = para error
+        if error
+          para error
+        end
       end
     end
   end
@@ -39,7 +41,7 @@ Shoes.app do
       render_o if board[x, y] == :o
       render_x if board[x, y] == :x
       click do 
-        @last_move = [x, y]
+        @last_move = TicTacToe::Position.new x, y
         error_message = nil
         begin 
           @game.play @game.whose_turn, x, y

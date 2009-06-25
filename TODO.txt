@@ -1,6 +1,5 @@
 TODO
 
 - Add text for error message
-- Add position class, with position.x and position.y
 - Check for win - 3 in a row
 - Game over? if no spaces left, its a scratch game

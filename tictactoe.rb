@@ -1,4 +1,11 @@
 module TicTacToe
+  class Position
+    attr_accessor :x, :y
+    def initialize x, y
+      @x = x
+      @y = y
+    end
+  end
   class Board
     def initialize
       @cells = Array.new(3) {Array.new(3)}

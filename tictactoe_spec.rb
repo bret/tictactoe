@@ -1,6 +1,13 @@
 require 'tictactoe'
 
 module TicTacToe
+  describe Position do
+    setup {@position = Position.new 1, 2}
+    it "should have an x and a y" do
+      @position.x.should == 1
+      @position.y.should == 2
+    end
+  end
   describe Board do
     setup {@board = Board.new}
     it "should have nine cells" do
