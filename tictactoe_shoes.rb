@@ -1,14 +1,20 @@
 require 'tictactoe'
 
-GAME = TicTacToe::Game.new
-BOARD = GAME.board
 TILE_SIZE = 60
 Shoes.app do
+  @game = TicTacToe::Game.new
+  def board
+    @game.board
+  end
   def display error = nil
     clear do
       stack do
+        button "New Game" do
+          @game = TicTacToe::Game.new
+          display
+        end
         display_board
-        para "Turn: #{GAME.whose_turn.to_s.upcase}"
+        para "Turn: #{@game.whose_turn.to_s.upcase}"
         if @last_move
           @move = para "Move: #{@last_move[0]}, #{@last_move[1]}"
         end
@@ -30,13 +36,13 @@ Shoes.app do
       strokewidth 2
       fill white
       rect 0,0,TILE_SIZE, TILE_SIZE
-      render_o if BOARD[x, y] == :o
-      render_x if BOARD[x, y] == :x
+      render_o if board[x, y] == :o
+      render_x if board[x, y] == :x
       click do 
         @last_move = [x, y]
         error_message = nil
         begin 
-          GAME.play GAME.whose_turn, x, y
+          @game.play @game.whose_turn, x, y
         rescue TicTacToe::SpaceNotEmpty => e
           error_message = e.message
         end
