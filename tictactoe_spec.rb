@@ -3,7 +3,7 @@ require 'tictactoe'
 Spec::Matchers.define :look_like do |string|
   match do |board|
     string.remove_spaces!
-    board.inspect == string
+    board.display_string_with("\n") == string
   end
 end
 
@@ -54,12 +54,24 @@ module TicTacToe
     def setup_board string
       board = Board.new
       string.remove_spaces!
+      y = 0
+      string.each_line do |row|
+        x = 0
+        row.chomp!
+        row.each_char do |symbol|
+          board[x,y] = player(symbol)
+          x += 1
+        end
+        y += 1
+      end
       board
     end
-    class Board
-      def should_look_like string
-        string.remove_spaces!
-        display_string_with("\n").should == string
+    def player character
+      case character
+      when 'X', 'x' : :x
+      when 'O', 'o' : :o
+      when '.' : nil
+      else raise "No player for #{character.inspect}"
       end
     end
     it "should be able to detect three-in-a-row" do
