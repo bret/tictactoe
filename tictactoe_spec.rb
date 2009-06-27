@@ -1,15 +1,28 @@
 require 'tictactoe'
 
+Spec::Matchers.define :look_like do |string|
+  match do |board|
+    string.remove_spaces!
+    board.inspect == string
+  end
+end
+
+class String
+  def remove_spaces!
+    self.gsub!(/ /, '')
+  end
+end
+
 module TicTacToe
   describe Position do
-    setup {@position = Position.new 1, 2}
+    before {@position = Position.new 1, 2}
     it "should have an x and a y" do
       @position.x.should == 1
       @position.y.should == 2
     end
   end
   describe Board do
-    setup {@board = Board.new}
+    before {@board = Board.new}
     it "should have nine cells" do
       count = 0
       @board.each {count += 1}
@@ -26,12 +39,43 @@ module TicTacToe
       positions.should include(*expected)
       positions.should have(9).items
     end
+    it "should be able to create a board using a string" do
+      @board = setup_board <<-END
+        X..
+        .X.
+        ..X
+      END
+      @board.should look_like(<<-END)
+        X..
+        .X.
+        ..X
+      END
+    end
+    def setup_board string
+      board = Board.new
+      string.remove_spaces!
+      board
+    end
+    class Board
+      def should_look_like string
+        string.remove_spaces!
+        display_string_with("\n").should == string
+      end
+    end
+    it "should be able to detect three-in-a-row" do
+      @board = setup_board <<-END
+        ...
+        ...
+        ...
+      END
+      @board.should be_three_in_a_row
+    end
   end
   describe Game do
-    setup {@game = Game.new}
+    before {@game = Game.new}
     def board_should_be string
-      string.gsub!(/ /,'') 
-      @game.board.inspect.should == string
+      string.remove_spaces!
+      @game.board.display_string_with("\n").should == string
     end
     it "should have a board" do
       @game.board.should be_a(Board)

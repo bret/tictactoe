@@ -1,4 +1,8 @@
 module TicTacToe
+  @@across_rows = (0..2).map{|y| (0..2).map{|x| [x, y]}}
+  @@down_rows = (0..2).map{|y| (0..2).map{|x| [x, y]}}
+  @@diagonals = [[[0,0], [1,1], [2,2]], [[0,2], [1,1], [2,0]]]
+  @@rows = @@across_rows + @@down_rows + @@diagonals
   class Position
     attr_accessor :x, :y
     def initialize x, y
@@ -23,16 +27,19 @@ module TicTacToe
     def []= x, y, value
       @cells[y][x] = value
     end
-    def inspect
+    def display_string_with separator
       display = {:x => 'X', :o => 'O', nil => '.'}
       result = ""
       @cells.each do | row |
         row.each do | value |
           result += display[value]
         end
-        result += "\n"
+        result += separator
       end
       result
+    end
+    def inspect
+      display_string_with ("/")
     end
   end
   class Game
