@@ -1,4 +1,5 @@
 require 'tictactoe'
+require 'facets'
 
 Spec::Matchers.define :look_like do |string|
   match do |board|
@@ -14,6 +15,7 @@ class String
 end
 
 module TicTacToe
+
   describe Position do
     before {@position = Position.new 1, 2}
     it "should have an x and a y" do
@@ -21,36 +23,9 @@ module TicTacToe
       @position.y.should == 2
     end
   end
+
   describe Board do
     before {@board = Board.new}
-    it "should have nine cells" do
-      count = 0
-      @board.each {count += 1}
-      count.should == 9
-    end
-    it "should allow you to access each cell's contents" do
-      @board.each {|x, y, contents| contents.should == nil}
-    end
-    it "should allow you to access each cell's position" do
-      positions = []
-      @board.each {|x, y, contents| positions << [x, y]}
-      require 'facets'
-      expected = (0..2).to_a.product((0..2))
-      positions.should include(*expected)
-      positions.should have(9).items
-    end
-    it "should be able to create a board using a string" do
-      @board = setup_board <<-END
-        X..
-        .X.
-        ..X
-      END
-      @board.should look_like(<<-END)
-        X..
-        .X.
-        ..X
-      END
-    end
     def setup_board string
       board = Board.new
       string.remove_spaces!
@@ -74,6 +49,34 @@ module TicTacToe
       else raise "No player for #{character.inspect}"
       end
     end
+
+    it "should have nine cells" do
+      count = 0
+      @board.each {count += 1}
+      count.should == 9
+    end
+    it "should allow you to access each cell's contents" do
+      @board.each {|x, y, contents| contents.should == nil}
+    end
+    it "should allow you to access each cell's position" do
+      positions = []
+      @board.each {|x, y, contents| positions << [x, y]}
+      expected = (0..2).to_a.product((0..2))
+      positions.should include(*expected)
+      positions.should have(9).items
+    end
+    it "should be able to create a board using a string" do
+      @board = setup_board <<-END
+        X..
+        .X.
+        ..X
+      END
+      @board.should look_like(<<-END)
+        X..
+        .X.
+        ..X
+      END
+    end
     it "should be able to detect three-in-a-row" do
       @board = setup_board <<-END
         ...
@@ -83,6 +86,7 @@ module TicTacToe
       @board.should be_three_in_a_row
     end
   end
+
   describe Game do
     before {@game = Game.new}
     def board_should_be string
