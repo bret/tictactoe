@@ -1,16 +1,17 @@
 TODO
 
-- Check for win - 3 in a row
 - where is the three-in-a-row?
 - draw a line through the 3-in-a-row
 - Game over? if no spaces left, its a scratch game
 - Add text for error message
-
-Stories
+- Able to print out results in html
 
 Player
 - Has access to the game board
 - can make a move
+
+
+Play by Play
 
 start
 x plays at 1,2
@@ -21,4 +22,5 @@ board should look like
 ...
 .xo
 
-print results in html
+
+

@@ -1,8 +1,4 @@
 module TicTacToe
-  @@across_rows = (0..2).map{|y| (0..2).map{|x| [x, y]}}
-  @@down_rows = (0..2).map{|y| (0..2).map{|x| [x, y]}}
-  @@diagonals = [[[0,0], [1,1], [2,2]], [[0,2], [1,1], [2,0]]]
-  @@rows = @@across_rows + @@down_rows + @@diagonals
   class Position
     attr_accessor :x, :y
     def initialize x, y
@@ -11,6 +7,10 @@ module TicTacToe
     end
   end
   class Board
+    across = (0..2).map{|y| (0..2).map{|x| [x, y]}}
+    down = (0..2).map{|x| (0..2).map{|y| [x, y]}}
+    diagonal = [[[0,0], [1,1], [2,2]], [[0,2], [1,1], [2,0]]]
+    @@rows = across + down + diagonal
     def initialize
       @cells = Array.new(3) {Array.new(3)}
     end
@@ -40,6 +40,14 @@ module TicTacToe
     end
     def inspect
       display_string_with ("/")
+    end
+    # Is there a three in a row for the player? If so, return the
+    # row with the match. If not, return false.
+    def three_in_a_row?(player)
+      match = @@rows.detect do | row |
+        (0..2).inject(true) {|memo, i| memo && self[*row[i]] == player}
+      end
+      match == [] ? false : match
     end
   end
   class Game

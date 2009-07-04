@@ -77,13 +77,38 @@ module TicTacToe
         ..X
       END
     end
-    it "should be able to detect three-in-a-row" do
+    it "should be able to detect three-in-a-row as diagonal" do
+      @board = setup_board <<-END
+        ..X
+        .X.
+        X..
+      END
+      @board.should be_three_in_a_row(:x)
+    end
+    it "should be able to detect three-in-a-row accross" do
+      @board = setup_board <<-END
+        ...
+        XXX
+        ...
+      END
+      @board.should be_three_in_a_row(:x)
+    end
+    it "should be able to detect three-in-a-row down" do
+      @board = setup_board <<-END
+        ..X
+        ..X
+        ..X
+      END
+      @board.should be_three_in_a_row(:x)
+      @board.three_in_a_row?(:x).should == [[2,0],[2,1],[2,2]]
+    end
+    it "should not detect three-in-a-row when it isn't there" do
       @board = setup_board <<-END
         ...
         ...
         ...
       END
-      @board.should be_three_in_a_row
+      @board.should_not be_three_in_a_row(:x)
     end
   end
 
