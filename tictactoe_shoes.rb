@@ -6,7 +6,7 @@ Shoes.app do
   def board
     @game.board
   end
-  def display error = nil
+  def display message = nil
     clear do
       stack do
         button "New Game" do
@@ -18,8 +18,8 @@ Shoes.app do
         if @last_move
           para "Move: #{@last_move.x}, #{@last_move.y}"
         end
-        if error
-          para error
+        if message
+          para message
         end
       end
     end
@@ -42,13 +42,17 @@ Shoes.app do
       render_x if board[x, y] == :x
       click do 
         @last_move = TicTacToe::Position.new x, y
-        error_message = nil
+        message = nil
         begin 
-          @game.play @game.whose_turn, x, y
+          player = @game.whose_turn
+          @game.play player, x, y
         rescue TicTacToe::SpaceNotEmpty => e
-          error_message = e.message
+          message = e.message
         end
-        display error_message
+        if @game.board.three_in_a_row? player
+          message = "Three in a row. #{player} wins."
+        end
+        display message
       end
     end
   end
