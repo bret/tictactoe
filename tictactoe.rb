@@ -6,10 +6,17 @@ module TicTacToe
       @y = y
     end
   end
+  class Row
+    attr_reader :cells, :type
+    def initialize cells, type
+      @cells = cells
+      @type = type
+    end
+  end
   class Board
-    across = (0..2).map{|y| (0..2).map{|x| [x, y]}}
-    down = (0..2).map{|x| (0..2).map{|y| [x, y]}}
-    diagonal = [[[0,0], [1,1], [2,2]], [[0,2], [1,1], [2,0]]]
+    across = (0..2).map{|y| Row.new((0..2).map{|x| [x, y]}, :across)}
+    down = (0..2).map{|x| Row.new((0..2).map{|y| [x, y]}, :down)}
+    diagonal = [Row.new([[0,0], [1,1], [2,2]], :diagonal), Row.new([[0,2], [1,1], [2,0]], :diagonal)]
     @@rows = across + down + diagonal
     def initialize
       @cells = Array.new(3) {Array.new(3)}
@@ -45,7 +52,7 @@ module TicTacToe
     # row with the match. If not, return false.
     def three_in_a_row?(player)
       @@rows.detect do | row |
-        (0..2).inject(true) {|memo, i| memo && self[*row[i]] == player}
+        (0..2).inject(true) {|memo, i| memo && self[*row.cells[i]] == player}
       end
     end
   end
