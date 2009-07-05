@@ -44,10 +44,9 @@ module TicTacToe
     # Is there a three in a row for the player? If so, return the
     # row with the match. If not, return false.
     def three_in_a_row?(player)
-      match = @@rows.detect do | row |
+      @@rows.detect do | row |
         (0..2).inject(true) {|memo, i| memo && self[*row[i]] == player}
       end
-      match == [] ? false : match
     end
   end
   class Game

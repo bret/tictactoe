@@ -50,7 +50,7 @@ Shoes.app do
           message = e.message
         end
         if @game.board.three_in_a_row? player
-          message = "Three in a row. #{player} wins."
+          message = "Three in a row. #{player.to_s.upcase} wins."
         end
         display message
       end
