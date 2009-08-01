@@ -1,4 +1,5 @@
 module TicTacToe
+
   class Position
     attr_accessor :x, :y
     def initialize x, y
@@ -6,17 +7,32 @@ module TicTacToe
       @y = y
     end
   end
+
   class Row
     attr_reader :cells, :type
     def initialize cells, type
       @cells = cells
       @type = type
     end
+    # Returns the dimensions of the line through the row
+    def line cell_size
+      case type 
+      when :across:
+        row = cells[0][1]
+        top = y2 = (0.5 + row) * cell_size
+        left = 0.25 * cell_size
+        x2 = 2.75 * cell_size
+      end
+      [left, top, x2, y2]
+    end
   end
+
   class Board
     across = (0..2).map{|y| Row.new((0..2).map{|x| [x, y]}, :across)}
     down = (0..2).map{|x| Row.new((0..2).map{|y| [x, y]}, :down)}
-    diagonal = [Row.new([[0,0], [1,1], [2,2]], :diagonal), Row.new([[0,2], [1,1], [2,0]], :diagonal)]
+    diagonal = [[[0,0], [1,1], [2,2]], [[0,2], [1,1], [2,0]]].map do |cells| 
+      Row.new(cells, :diagonal)
+    end
     @@rows = across + down + diagonal
     def initialize
       @cells = Array.new(3) {Array.new(3)}
@@ -56,6 +72,7 @@ module TicTacToe
       end
     end
   end
+
   class Game
     attr_reader :whose_turn, :board
     def initialize
@@ -75,6 +92,7 @@ module TicTacToe
       end
     end
   end
+
   class NotYourTurn < Exception; end
   class SpaceNotEmpty < Exception; end
 end

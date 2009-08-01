@@ -50,22 +50,22 @@ module TicTacToe
       end
     end
 
-    it "should have nine cells" do
+    it "has nine cells" do
       count = 0
       @board.each {count += 1}
       count.should == 9
     end
-    it "should allow you to access each cell's contents" do
+    it "allows access each cell's contents" do
       @board.each {|x, y, contents| contents.should == nil}
     end
-    it "should allow you to access each cell's position" do
+    it "allows access each cell's position" do
       positions = []
       @board.each {|x, y, contents| positions << [x, y]}
       expected = (0..2).to_a.product((0..2))
       positions.should include(*expected)
       positions.should have(9).items
     end
-    it "should be able to create a board using a string" do
+    it "can be setup from a 'string view'" do
       @board = setup_board <<-END
         X..
         .X.
@@ -77,25 +77,27 @@ module TicTacToe
         ..X
       END
     end
-    it "should be able to detect three-in-a-row as diagonal" do
+    it "can detect three-in-a-row as diagonal" do
       @board = setup_board <<-END
         ..X
         .X.
         X..
       END
       @board.should be_three_in_a_row(:x)
-      @board.three_in_a_row?(:x).type.should == :diagonal
+      row = @board.three_in_a_row?(:x)
+      row.type.should == :diagonal
     end
-    it "should be able to detect three-in-a-row across" do
+    it "can detect three-in-a-row across" do
       @board = setup_board <<-END
         ...
         XXX
         ...
       END
-      @board.should be_three_in_a_row(:x)
-      @board.three_in_a_row?(:x).type.should == :across
+      row = @board.three_in_a_row?(:x)
+      row.type.should == :across
+      row.line(60).should == [15.0, 90.0, 165.0, 90.0]
     end
-    it "should be able to detect three-in-a-row down" do
+    it "can detect three-in-a-row down" do
       @board = setup_board <<-END
         ..X
         ..X
@@ -105,7 +107,7 @@ module TicTacToe
       @board.three_in_a_row?(:x).type.should == :down
       @board.three_in_a_row?(:x).cells.should == [[2,0],[2,1],[2,2]]
     end
-    it "should not detect three-in-a-row when it isn't there" do
+    it "won't detect a three-in-a-row when it isn't there" do
       @board = setup_board <<-END
         ...
         ...
@@ -121,10 +123,10 @@ module TicTacToe
       string.remove_spaces!
       @game.board.display_string_with("\n").should == string
     end
-    it "should have a board" do
+    it "has a board" do
       @game.board.should be_a(Board)
     end
-    it "should allow you to make a move (center)" do
+    it "allows you to move in the center" do
       @game.play :x, 1, 1
       @game.board[1, 1].should == :x
       board_should_be <<-END
@@ -133,7 +135,7 @@ module TicTacToe
         ...
       END
     end
-    it "should allow you to make a move (corner)" do
+    it "allows you to move in the corner" do
       @game.play :x, 0, 2
       @game.board[0, 2].should == :x
       board_should_be <<-END
@@ -142,24 +144,24 @@ module TicTacToe
         X..
       END
     end
-    it "should alternate turns" do
+    it "alternates turns" do
       @game.play :x, 1, 1
       @game.whose_turn.should == :o
       @game.play :o, 0,0
       @game.whose_turn.should == :x
     end
-    it "should not allow you to play when its not your turn" do
+    it "won't let you to play when its not your turn" do
       lambda {@game.play :o, 1, 1}.should raise_error(NotYourTurn)
     end
-    it "should not allow you to play in a space that is filled" do
+    it "won't let you to play in a space that is filled" do
       @game.play :x, 1, 1
       lambda {@game.play :o, 1, 1}.should raise_error(SpaceNotEmpty)
     end
     describe "at start" do
-      it "should start with X" do
+      it "starts with X's turn" do
         @game.whose_turn.should == :x
       end
-      it "should have a blank board" do
+      it "has a blank board" do
         board_should_be <<-END
           ...
           ...
