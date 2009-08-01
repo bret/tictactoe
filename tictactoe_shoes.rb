@@ -54,8 +54,8 @@ Shoes.app do
     begin 
       player = @game.whose_turn
       @game.play player, x, y
-    rescue TicTacToe::SpaceNotEmpty => e
-      @message = e.message
+    rescue TicTacToe::SpaceNotEmpty
+    rescue TicTacToe::GameOver
     end
     if @game.over?
       @message = @game.result

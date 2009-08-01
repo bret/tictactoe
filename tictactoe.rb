@@ -83,10 +83,17 @@ module TicTacToe
       @over = false
     end
     def play player, x, y
+      raise GameOver if over?
       raise NotYourTurn unless whose_turn == player
       raise SpaceNotEmpty unless board[x, y].nil?
       @board[x, y] = player
-      @whose_turn = other_player
+      if @board.three_in_a_row? player
+        @result = "Three in a row. #{player.to_s.upcase} wins."
+        @over = true
+        @whose_turn = nil
+      else
+        @whose_turn = other_player
+      end
     end
     def other_player
       case @whose_turn
@@ -95,13 +102,11 @@ module TicTacToe
       end
     end
     def over?
-      if @board.three_in_a_row? other_player
-        @result = "Three in a row. #{other_player.to_s.upcase} wins."
-        @over = true
-      end
+      @over
     end
   end
 
   class NotYourTurn < Exception; end
   class SpaceNotEmpty < Exception; end
+  class GameOver < Exception; end
 end

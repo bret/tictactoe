@@ -1,12 +1,9 @@
 IN PROGRESS
 - draw a line through the 3-in-a-row
-- checks for a three in a row after each turn
 
 TODO
 
-- game is over when there is a three in a row
 - Game over? if no spaces left, its a scratch game
-- game.over?
 - game.winner # nil if not over
 - game.last_move should have the last move in it
 

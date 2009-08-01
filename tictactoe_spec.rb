@@ -151,12 +151,20 @@ module TicTacToe
       @game.play :o, 0,0
       @game.whose_turn.should == :x
     end
-    it "won't let you to play when its not your turn" do
+    it "won't let you play when its not your turn" do
       lambda {@game.play :o, 1, 1}.should raise_error(NotYourTurn)
     end
-    it "won't let you to play in a space that is filled" do
+    it "won't let you play in a space that is filled" do
       @game.play :x, 1, 1
       lambda {@game.play :o, 1, 1}.should raise_error(SpaceNotEmpty)
+    end
+    it "won't let you play when the game is over" do
+      @game.play :x, 0, 0
+      @game.play :o, 0, 1
+      @game.play :x, 1, 0
+      @game.play :o, 1, 1
+      @game.play :x, 2, 0
+      lambda {@game.play :o, 2, 1}.should raise_error(GameOver)
     end
     it "can tell if the game is over due to three-in-a-row" do
       @game.board = Board.setup <<-END
