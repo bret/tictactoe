@@ -24,24 +24,21 @@ module TicTacToe
     end
   end
 
-  describe Board do
-    before {@board = Board.new}
-    def setup_board string
+  class Board
+    def self.setup string
       board = Board.new
       string.remove_spaces!
-      y = 0
-      string.each_line do |row|
+      string.each_with_index do |row, y|
         x = 0
         row.chomp!
         row.each_char do |symbol|
           board[x,y] = player(symbol)
           x += 1
         end
-        y += 1
       end
       board
     end
-    def player character
+    def self.player character
       case character
       when 'X', 'x' : :x
       when 'O', 'o' : :o
@@ -49,6 +46,10 @@ module TicTacToe
       else raise "No player for #{character.inspect}"
       end
     end
+  end
+
+  describe Board do
+    before {@board = Board.new}
 
     it "has nine cells" do
       count = 0
@@ -66,7 +67,7 @@ module TicTacToe
       positions.should have(9).items
     end
     it "can be setup from a 'string view'" do
-      @board = setup_board <<-END
+      @board = Board.setup <<-END
         X..
         .X.
         ..X
@@ -78,7 +79,7 @@ module TicTacToe
       END
     end
     it "can detect three-in-a-row as diagonal" do
-      @board = setup_board <<-END
+      @board = Board.setup <<-END
         ..X
         .X.
         X..
@@ -88,7 +89,7 @@ module TicTacToe
       row.type.should == :diagonal
     end
     it "can detect three-in-a-row across" do
-      @board = setup_board <<-END
+      @board = Board.setup <<-END
         ...
         XXX
         ...
@@ -98,7 +99,7 @@ module TicTacToe
       row.line(60).should == [15.0, 90.0, 165.0, 90.0]
     end
     it "can detect three-in-a-row down" do
-      @board = setup_board <<-END
+      @board = Board.setup <<-END
         ..X
         ..X
         ..X
@@ -108,7 +109,7 @@ module TicTacToe
       @board.three_in_a_row?(:x).cells.should == [[2,0],[2,1],[2,2]]
     end
     it "won't detect a three-in-a-row when it isn't there" do
-      @board = setup_board <<-END
+      @board = Board.setup <<-END
         ...
         ...
         ...
@@ -157,6 +158,17 @@ module TicTacToe
       @game.play :x, 1, 1
       lambda {@game.play :o, 1, 1}.should raise_error(SpaceNotEmpty)
     end
+    it "can tell if the game is over due to three-in-a-row" do
+      @game.board = Board.setup <<-END
+        ...
+        .X.
+        X..
+      END
+      @game.play :x, 2, 0
+      @game.should be_over
+      @game.result.should == "Three in a row. X wins."      
+    end
+
     describe "at start" do
       it "starts with X's turn" do
         @game.whose_turn.should == :x

@@ -74,10 +74,13 @@ module TicTacToe
   end
 
   class Game
-    attr_reader :whose_turn, :board
+    attr_reader :whose_turn, :result
+    attr_accessor :board
     def initialize
       @whose_turn = :x
       @board = Board.new
+      @result = nil
+      @over = false
     end
     def play player, x, y
       raise NotYourTurn unless whose_turn == player
@@ -89,6 +92,12 @@ module TicTacToe
       case @whose_turn
       when :x: :o
       when :o: :x
+      end
+    end
+    def over?
+      if @board.three_in_a_row? other_player
+        @result = "Three in a row. #{other_player.to_s.upcase} wins."
+        @over = true
       end
     end
   end

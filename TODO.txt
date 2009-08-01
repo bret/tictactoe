@@ -1,5 +1,6 @@
 IN PROGRESS
 - draw a line through the 3-in-a-row
+- checks for a three in a row after each turn
 
 TODO
 

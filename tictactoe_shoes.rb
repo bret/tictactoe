@@ -57,8 +57,8 @@ Shoes.app do
     rescue TicTacToe::SpaceNotEmpty => e
       @message = e.message
     end
-    if @game.board.three_in_a_row? player
-      @message = "Three in a row. #{player.to_s.upcase} wins."
+    if @game.over?
+      @message = @game.result
     end
     display
   end
