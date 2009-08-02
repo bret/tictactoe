@@ -56,12 +56,25 @@ module TicTacToe
       @board.each {count += 1}
       count.should == 9
     end
-    it "allows access each cell's contents" do
-      @board.each {|x, y, contents| contents.should == nil}
+    it "allows access each cell's contents (empty board)" do
+      @board.each_with_index {|x, y, contents| contents.should == nil}
+    end
+    it "allows access each cell's contents (full board)" do
+      @board = Board.setup <<-END
+        XOX
+        OXX
+        OXO
+      END
+      result = ""
+      @board.each do |contents| 
+        contents.should_not be_nil
+        result << contents.to_s
+      end
+      result.should == 'xoxoxxoxo'
     end
     it "allows access each cell's position" do
       positions = []
-      @board.each {|x, y, contents| positions << [x, y]}
+      @board.each_with_index {|x, y, contents| positions << [x, y]}
       expected = (0..2).to_a.product((0..2))
       positions.should include(*expected)
       positions.should have(9).items
@@ -115,6 +128,22 @@ module TicTacToe
         ...
       END
       @board.should_not be_three_in_a_row(:x)
+    end
+    it "can detect a full board" do
+      @board = Board.setup <<-END
+        XOX
+        OXX
+        OXO
+      END
+      @board.should be_filled
+    end
+    it "won't detect a full board when it isn't full" do
+      @board = Board.setup <<-END
+        X..
+        X..
+        X..
+      END
+      @board.should_not be_filled
     end
   end
 
@@ -175,6 +204,16 @@ module TicTacToe
       @game.play :x, 2, 0
       @game.should be_over
       @game.result.should == "Three in a row. X wins."      
+    end
+    it "can tell if the game is over due to a scratch game" do
+      @game.board = Board.setup <<-END
+        XOX
+        OX.
+        OXO
+      END
+      @game.play :x, 2, 1
+      @game.should be_over
+      @game.result.should == "Scratch Game."            
     end
 
     describe "at start" do

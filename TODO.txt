@@ -1,29 +1,14 @@
 IN PROGRESS
 - draw a line through the 3-in-a-row
 
-TODO
-
-- Game over? if no spaces left, its a scratch game
+MAYBE
 - game.winner # nil if not over
 - game.last_move should have the last move in it
-
 - Able to print out results in html
 
 A Player
 - Has access to the game board
 - Can make a move
-
-
-Play by Play
-
-start
-x plays at 1,2
-o plays at 2,2
-
-board should look like
-...
-...
-.xo
 
 
 

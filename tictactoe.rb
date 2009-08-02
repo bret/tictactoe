@@ -37,11 +37,16 @@ module TicTacToe
     def initialize
       @cells = Array.new(3) {Array.new(3)}
     end
-    def each
+    def each_with_index
       @cells.each_with_index do |row, y|
         row.each_with_index do |contents, x|
           yield x, y, contents
         end
+      end
+    end
+    def each
+      each_with_index do | x, y, content |
+        yield content
       end
     end
     def [] x, y
@@ -71,6 +76,10 @@ module TicTacToe
         (0..2).inject(true) {|memo, i| memo && self[*row.cells[i]] == player}
       end
     end
+    include Enumerable
+    def filled?
+      self.inject(true) {|memo, content| memo && !content.nil?}
+    end
   end
 
   class Game
@@ -89,6 +98,10 @@ module TicTacToe
       @board[x, y] = player
       if @board.three_in_a_row? player
         @result = "Three in a row. #{player.to_s.upcase} wins."
+        @over = true
+        @whose_turn = nil
+      elsif @board.filled?
+        @result = "Scratch Game."
         @over = true
         @whose_turn = nil
       else
