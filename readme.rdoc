@@ -1,0 +1,16 @@
+= Tic Tac Toe
+
+This game uses the Shoes framework. It was developed on Mac, but should also work on other platforms (Linux, Windows).
+
+== Install
+
+To run the game, first install Shoes 2 (this includes Ruby with it). 
+* http://shoooes.net/
+
+After you do that, run tictactoe_shoes.rb using Shoes.
+
+== Testing
+
+The game was developed test-first using rspec tests against a test engine. The tests are are in tictactoe_spec.rb and you can run them if you have rspec installed.
+
+The tictactoe.rb file itself is pure Ruby and does not use Shoes itself.
