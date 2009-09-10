@@ -5,7 +5,7 @@ This game uses the Shoes framework. It was developed on Mac, but should also wor
 == Install
 
 To run the game, first install Shoes 2 (this includes Ruby with it). 
-* http://shoooes.net/
+* http://shoes.heroku.com/
 
 After you do that, run tictactoe_shoes.rb using Shoes.
 
