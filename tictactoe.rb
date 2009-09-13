@@ -24,11 +24,16 @@ module TicTacToe
     # Returns the dimensions of the line through the row
     def line cell_size
       case type 
-      when :across:
+      when :across
         row = cells[0][1]
         top = y2 = (0.5 + row) * cell_size
         left = 0.25 * cell_size
         x2 = 2.75 * cell_size
+      when :down
+        row = cells[0][0]
+        left = x2 = (0.5 + row) * cell_size
+        top = 0.25 * cell_size
+        y2 = 2.75 * cell_size
       end
       [left, top, x2, y2]
     end

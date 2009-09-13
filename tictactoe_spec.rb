@@ -118,8 +118,10 @@ module TicTacToe
         ..X
       END
       @board.should be_three_in_a_row(:x)
-      @board.three_in_a_row?(:x).type.should == :down
-      @board.three_in_a_row?(:x).cells.should == [[2,0],[2,1],[2,2]]
+      row = @board.three_in_a_row?(:x)
+      row.type.should == :down
+      row.cells.should == [[2,0],[2,1],[2,2]]
+      row.line(4).should == [10.0, 1.0, 10.0, 11.0]
     end
     it "won't detect a three-in-a-row when it isn't there" do
       @board = Board.setup <<-END
