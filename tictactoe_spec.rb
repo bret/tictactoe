@@ -100,6 +100,8 @@ module TicTacToe
       @board.should be_three_in_a_row(:x)
       row = @board.three_in_a_row?(:x)
       row.type.should == :diagonal
+      row.cells.should == [[0,2], [1,1], [2,0]]
+      row.line(4).should == [1.0, 11.0, 11.0, 1.0]
     end
     it "can detect three-in-a-row across" do
       @board = Board.setup <<-END
