@@ -39,11 +39,29 @@ module TicTacToe
     end
   end
 
+  class AcrossRow < Row
+    def initialize y
+      super((0..2).map{|x| [x, y]}, :across)
+    end
+  end
+
+  class DownRow < Row
+    def initialize x
+      super((0..2).map{|y| [x, y]}, :down)
+    end
+  end
+
+  class DiagonalRow < Row
+    def initialize cells
+      super(cells, :diagonal)
+    end
+  end
+
   class Board
-    across = (0..2).map{|y| Row.new((0..2).map{|x| [x, y]}, :across)}
-    down = (0..2).map{|x| Row.new((0..2).map{|y| [x, y]}, :down)}
+    across = (0..2).map{|y| AcrossRow.new y}
+    down = (0..2).map{|x| DownRow.new x}
     diagonal = [[[0,0], [1,1], [2,2]], [[0,2], [1,1], [2,0]]].map do |cells| 
-      Row.new(cells, :diagonal)
+      DiagonalRow.new(cells)
     end
     @@rows = across + down + diagonal
     def initialize
