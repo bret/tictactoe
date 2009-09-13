@@ -1,5 +1,12 @@
 module TicTacToe
 
+  module Player
+    def self.display player
+      display = {:x => 'X', :o => 'O', nil => '.'}
+      display[player]
+    end
+  end
+  
   class Position
     attr_accessor :x, :y
     def initialize x, y
@@ -56,11 +63,10 @@ module TicTacToe
       @cells[y][x] = value
     end
     def display_string_with separator
-      display = {:x => 'X', :o => 'O', nil => '.'}
       result = ""
       @cells.each do | row |
         row.each do | value |
-          result += display[value]
+          result += Player.display(value)
         end
         result += separator
       end
@@ -83,7 +89,7 @@ module TicTacToe
   end
 
   class Game
-    attr_reader :whose_turn, :result
+    attr_reader :whose_turn, :result, :winning_row
     attr_accessor :board
     def initialize
       @whose_turn = :x
@@ -96,8 +102,8 @@ module TicTacToe
       raise NotYourTurn unless whose_turn == player
       raise SpaceNotEmpty unless board[x, y].nil?
       @board[x, y] = player
-      if @board.three_in_a_row? player
-        @result = "Three in a row. #{player.to_s.upcase} wins."
+      if @winning_row = @board.three_in_a_row?(player)
+        @result = "Three in a row. #{Player.display(player)} wins."
         @over = true
         @whose_turn = nil
       elsif @board.filled?

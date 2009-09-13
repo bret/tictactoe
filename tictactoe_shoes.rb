@@ -1,18 +1,20 @@
 require 'tictactoe'
 
 Shoes.app do
+
   def new_game
     @game = TicTacToe::Game.new
     display
   end
+
   def display
     clear do
       stack do
+        display_board
         button "New Game" do
           new_game
         end
-        display_board
-        para "Turn: #{@game.whose_turn.to_s.upcase}"
+        para "Turn: #{TicTacToe::Player.display(@game.whose_turn)}"
         if @last_move
           para "Move: #{@last_move.x}, #{@last_move.y}"
         end
@@ -22,6 +24,17 @@ Shoes.app do
       end
     end
   end
+
+  def draw_stroke x1, y1, x2, y2
+    @stroke_animation = animate 36 do | frame |
+      strokewidth 3
+      xz = x2 > x1 ? x1 + frame*4 : x1
+      yz = y2 > y1 ? y1 + frame*4 : y1
+      line x1, y1, xz, yz
+      @stroke_animation.stop if xz >= x2 && yz >= y2
+    end
+  end
+
   def display_board
     (0..2).each do |y|
       flow do    
@@ -31,6 +44,7 @@ Shoes.app do
       end
     end
   end
+
   def render_cell x, y
     image :width => 60, :height => 60 do
       strokewidth 2
@@ -41,13 +55,16 @@ Shoes.app do
       click {click_cell x, y}
     end
   end
+
   def render_x
     line 15, 15, 45, 45
     line 45, 15, 15, 45
   end
+
   def render_o
     oval :radius => 15, :top => 15, :left => 15, :hidden => true
   end
+
   def click_cell x, y
     @last_move = TicTacToe::Position.new x, y
     @message = nil
@@ -59,8 +76,11 @@ Shoes.app do
     end
     if @game.over?
       @message = @game.result
+      info @game.winning_row.line(60).inspect
+      draw_stroke *(@game.winning_row.line(60))
     end
     display
   end
+
   new_game
 end

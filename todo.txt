@@ -1,5 +1,10 @@
 IN PROGRESS
 - draw a line through the 3-in-a-row
+   * just draw a line (through any row)
+   * just draw a line through the center of the right row
+   * draw the line gradually
+- draw the line down
+- draw the line diagonally
 
 MAYBE
 - game.winner # nil if not over
