@@ -1,5 +1,10 @@
 IN PROGRESS
 
+BUGS
+- If you click after game is won, final line is redrawn.
+- Can't play final move in a scratch game. (And "scratch game" is reported after you then hit "new game".)
+- If you hit new game while final line is being drawn, it stays on new game.
+
 MAYBE
 - game.winner # nil if not over
 - game.last_move should have the last move in it

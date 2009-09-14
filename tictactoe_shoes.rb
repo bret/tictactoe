@@ -14,12 +14,13 @@ Shoes.app do
         button "New Game" do
           new_game
         end
-        para "Turn: #{TicTacToe::Player.display(@game.whose_turn)}"
+        if @game.result
+          para @game.result
+        else
+          para "Turn: #{TicTacToe::Player.display(@game.whose_turn)}"
+        end
         if @last_move
           para "Move: #{@last_move.x}, #{@last_move.y}"
-        end
-        if @message
-          para @message
         end
       end
     end
@@ -28,9 +29,9 @@ Shoes.app do
   def draw_stroke x1, y1, x2, y2
     dx = x2 <=> x1
     dy = y2 <=> y1
-    info "dx = #{dx}, dy = #{dy}"
     animation = animate 36 do | frame |
       strokewidth 3
+      # Note: multiplier (i.e. 5) must be a factor of the total length
       xz = x1 + frame*5*dx
       yz = y1 + frame*5*dy
       line x1, y1, xz, yz
@@ -77,9 +78,7 @@ Shoes.app do
     rescue TicTacToe::SpaceNotEmpty
     rescue TicTacToe::GameOver
     end
-    if @game.over?
-      @message = @game.result
-      info @game.winning_row.line(60).inspect
+    if @game.winning_row
       draw_stroke *(@game.winning_row.line(60))
     end
     display

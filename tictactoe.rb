@@ -146,7 +146,6 @@ module TicTacToe
       @whose_turn = :x
       @board = Board.new
       @result = nil
-      @over = false
     end
     def play player, x, y
       raise GameOver if over?
@@ -154,13 +153,9 @@ module TicTacToe
       raise SpaceNotEmpty unless board[x, y].nil?
       @board[x, y] = player
       if @winning_row = @board.three_in_a_row?(player)
-        @result = "Three in a row. #{Player.display(player)} wins."
-        @over = true
-        @whose_turn = nil
+        self.result = "Three in a row. #{Player.display(player)} wins."
       elsif @board.filled?
-        @result = "Scratch Game."
-        @over = true
-        @whose_turn = nil
+        self.result = "Scratch Game."
       else
         @whose_turn = other_player
       end
@@ -171,8 +166,12 @@ module TicTacToe
       when :o: :x
       end
     end
+    def result= message
+      @result = message
+      @whose_turn = nil
+    end
     def over?
-      @over
+      !!@result
     end
   end
 
