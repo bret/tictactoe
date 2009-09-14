@@ -26,12 +26,15 @@ Shoes.app do
   end
 
   def draw_stroke x1, y1, x2, y2
-    @stroke_animation = animate 36 do | frame |
+    dx = x2 <=> x1
+    dy = y2 <=> y1
+    info "dx = #{dx}, dy = #{dy}"
+    animation = animate 36 do | frame |
       strokewidth 3
-      xz = x2 > x1 ? x1 + frame*4 : x1
-      yz = y2 > y1 ? y1 + frame*4 : y1
+      xz = x1 + frame*5*dx
+      yz = y1 + frame*5*dy
       line x1, y1, xz, yz
-      @stroke_animation.stop if xz >= x2 && yz >= y2
+      animation.stop if xz == x2 && yz == y2
     end
   end
 

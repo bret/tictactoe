@@ -21,33 +21,33 @@ module TicTacToe
       @cells = cells
       @type = type
     end
-    # Returns the dimensions of the line through the row
-    def line cell_size
-      case type 
-      when :across
-        row = cells[0][1]
-        top = y2 = (0.5 + row) * cell_size
-        left = 0.25 * cell_size
-        x2 = 2.75 * cell_size
-      when :down
-        row = cells[0][0]
-        left = x2 = (0.5 + row) * cell_size
-        top = 0.25 * cell_size
-        y2 = 2.75 * cell_size
-      end
-      [left, top, x2, y2]
-    end
   end
 
   class AcrossRow < Row
     def initialize y
       super((0..2).map{|x| [x, y]}, :across)
+      @row = y
+    end
+    # Returns the dimensions of the line through the row
+    def line cell_size
+      top = y2 = (0.5 + @row) * cell_size
+      left = 0.25 * cell_size
+      x2 = 2.75 * cell_size
+      [left, top, x2, y2]
     end
   end
 
   class DownRow < Row
     def initialize x
       super((0..2).map{|y| [x, y]}, :down)
+      @column = x
+    end
+    # Returns the dimensions of the line through the row
+    def line cell_size
+      left = x2 = (0.5 + @column) * cell_size
+      top = 0.25 * cell_size
+      y2 = 2.75 * cell_size
+      [left, top, x2, y2]
     end
   end
 
@@ -57,12 +57,40 @@ module TicTacToe
     end
   end
 
+  # \
+  class BendRow < DiagonalRow
+    def initialize
+      super [[0,0], [1,1], [2,2]]
+    end
+    # Returns the dimensions of the line through the row
+    def line cell_size
+      left = 0.25 * cell_size
+      top = 0.25 * cell_size
+      x2 = 2.75 * cell_size
+      y2 = 2.75 * cell_size
+      [left, top, x2, y2]
+    end
+  end
+  
+  # /
+  class BendSinisterRow < DiagonalRow
+    def initialize
+      super [[0,2], [1,1], [2,0]]
+    end
+    # Returns the dimensions of the line through the row
+    def line cell_size
+      left = 0.25 * cell_size
+      top = 2.75 * cell_size
+      x2 = 2.75 * cell_size
+      y2 = 0.25 * cell_size
+      [left, top, x2, y2]
+    end
+  end
+
   class Board
     across = (0..2).map{|y| AcrossRow.new y}
     down = (0..2).map{|x| DownRow.new x}
-    diagonal = [[[0,0], [1,1], [2,2]], [[0,2], [1,1], [2,0]]].map do |cells| 
-      DiagonalRow.new(cells)
-    end
+    diagonal = [BendRow.new, BendSinisterRow.new]
     @@rows = across + down + diagonal
     def initialize
       @cells = Array.new(3) {Array.new(3)}
